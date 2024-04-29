@@ -20,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -183,6 +184,65 @@ public class UserControllerTest {
         User user = new User();
         ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
         assertThat(response.getBody().getValidationErrors().size()).isEqualTo(3);
+    }
+    @Test
+    public void postUser_whenUserHasNullUserName_receiveMessageOfNullErrorForUserName(){
+        User user = createValidUser();
+        user.setUserName(null);
+        ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
+        Map<String, String> validationErrors = response.getBody().getValidationErrors();
+        assertThat(validationErrors.get("userName")).isEqualTo("Username cannot be null");
+    }
+
+    @Test
+    public void postUser_whenUserHasNullPassword_receiveGenericMessageOfNullError(){
+        User user = createValidUser();
+        user.setPassword(null);
+        ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
+        Map<String, String> validationErrors = response.getBody().getValidationErrors();
+        assertThat(validationErrors.get("password")).isEqualTo("Cannot be null");
+    }
+
+    @Test
+    public void postUser_whenUserHasNullDisplayName_receiveMessageOfNullErrorForDisplayName(){
+        User user = createValidUser();
+        user.setDisplayName(null);
+        ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
+        Map<String, String> validationErrors = response.getBody().getValidationErrors();
+        assertThat(validationErrors.get("displayName")).isEqualTo("Display name cannot be null");
+    }
+    @Test
+    public void postUser_whenUserHasInvalidLengthUsername_receiveGenericMessageOfSizeError(){
+        User user = createValidUser();
+        user.setUserName("ab");
+        ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
+        Map<String, String> validationErrors = response.getBody().getValidationErrors();
+        assertThat(validationErrors.get("userName")).isEqualTo("It must have minimum 3 and maximum 255 characters");
+    }
+
+    @Test
+    public void postUser_whenUserHasInvalidPasswordPattern_receiveMessageOfPasswordPatternError(){
+        User user = createValidUser();
+        user.setPassword("alllowercase");
+        ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
+        Map<String, String> validationErrors = response.getBody().getValidationErrors();
+        assertThat(validationErrors.get("password")).isEqualTo("Password must have at least one uppercase, one lowercase letter and one number");
+    }
+
+    @Test
+    public void postUser_whenAnotherUserHasSameUsername_receiveBadRequest(){
+        userRepository.save(createValidUser());
+        User user = createValidUser();
+        ResponseEntity<Object> response = postSignup(user, Object.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+    @Test
+    public void postUser_whenAnotherUserHasSameUsername_receiveMessageOfDuplicateUserName(){
+        userRepository.save(createValidUser());
+        User user = createValidUser();
+        ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
+        Map<String, String> validationErrors = response.getBody().getValidationErrors();
+        assertThat(validationErrors.get("userName")).isEqualTo("This name is in use");
     }
 
     public <T> ResponseEntity<T> postSignup(Object request, Class<T> response){
