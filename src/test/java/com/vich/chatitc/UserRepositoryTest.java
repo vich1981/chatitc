@@ -24,13 +24,9 @@ public class UserRepositoryTest {
 
     @Test
     public void findByUserName_whenUserExists_returnsUser(){
-        User user = new User();
 
-        user.setUserName("test-user");
-        user.setDisplayName("test-display");
-        user.setPassword("P4ssword");
 
-        testEntityManager.persist(user);
+        testEntityManager.persist(TestUtil.createValidUser());
 
         User inDB = userRepository.findByUserName("test-user");
         assertThat(inDB).isNotNull();

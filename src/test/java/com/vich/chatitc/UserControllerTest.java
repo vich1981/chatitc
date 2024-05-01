@@ -7,6 +7,8 @@ import com.vich.chatitc.user.UserRepository;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+
+import static com.vich.chatitc.TestUtil.createValidUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.runner.RunWith;
@@ -248,12 +250,5 @@ public class UserControllerTest {
     public <T> ResponseEntity<T> postSignup(Object request, Class<T> response){
         return testRestTemplate.postForEntity(API_1_0_USERS, request, response);
     }
-    private User createValidUser(){
-        User user = new User();
-        //user.setId(1);
-        user.setUserName("test-user");
-        user.setDisplayName("test-display");
-        user.setPassword("P4ssword");
-        return user;
-    }
+
 }

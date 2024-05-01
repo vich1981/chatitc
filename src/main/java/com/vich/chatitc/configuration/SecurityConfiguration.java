@@ -4,9 +4,11 @@ import com.vich.chatitc.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
@@ -36,36 +38,25 @@ public class SecurityConfiguration{
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(authUserService);
         provider.setPasswordEncoder(passwordEncoder());
-        System.out.println("provider work!!!");
         return provider;
     }
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(authUserService).passwordEncoder(passwordEncoder());
-//    }
 
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/api/1.0/login").authenticated()
-                                .anyRequest().permitAll())
+                                .requestMatchers(HttpMethod.POST,"/api/1.0/login").authenticated()
+                                .requestMatchers("/api/1.0/**").permitAll()//hasAuthority("USER")
+                                .anyRequest().permitAll())//authenticated())
 
                 .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.authenticationEntryPoint(new BasicAuthenticationEntryPoint()))
-               // .authenticationProvider(authenticationProvider())// this is custom authenticationProvider
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        http.authenticationProvider(authenticationProvider());
         return http.build();
     }
-
-//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(authUserService).passwordEncoder(passwordEncoder());
-//    }
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager(authUserService));
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
