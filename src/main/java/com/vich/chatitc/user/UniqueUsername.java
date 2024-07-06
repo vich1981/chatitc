@@ -8,11 +8,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = UniqueUserNameValidator.class)
+@Constraint(validatedBy = UniqueUsernameValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueUserName {
-    String message() default "{chatitc.constraints.userName.UniqueUserName.message}";
+public @interface UniqueUsername {
+    String message() default "{chatitc.constraints.username.UniqueUsername.message}";
 
     Class<?>[] groups() default { };
 

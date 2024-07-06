@@ -28,13 +28,13 @@ public class UserRepositoryTest {
 
         testEntityManager.persist(TestUtil.createValidUser());
 
-        User inDB = userRepository.findByUserName("test-user");
+        User inDB = userRepository.findByUsername("test-user");
         assertThat(inDB).isNotNull();
     }
 
     @Test
     public void findByUserName_whenUserDoesNotExist_returnsNull() {
-        User inDB = userRepository.findByUserName("nonexistinguser");
+        User inDB = userRepository.findByUsername("nonexistinguser");
         assertThat(inDB).isNull();
     }
 }

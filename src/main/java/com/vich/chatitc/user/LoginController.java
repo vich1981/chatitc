@@ -3,6 +3,7 @@ package com.vich.chatitc.user;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.vich.chatitc.error.ApiError;
 import com.vich.chatitc.shared.CurrentUser;
+import com.vich.chatitc.user.vm.UserVM;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,14 +21,14 @@ import java.util.Map;
 public class LoginController {
 
     @PostMapping("/api/1.0/login")
-    @JsonView(Views.Base.class)
-    User handleLogin(@CurrentUser User loggedInUser){
+    //@JsonView(Views.Base.class)
+    UserVM handleLogin(@CurrentUser User loggedInUser){
         //User loggedInUser = (User)authentication.getPrincipal();// альтернатива .SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        Map<String, Object> userMap = new HashMap<>();
 //        userMap.put("id", loggedInUser.getId());
 //        userMap.put("image", loggedInUser.getImage());
 //        userMap.put("displayName", loggedInUser.getDisplayName());
-        return loggedInUser;
+        return new UserVM(loggedInUser);
     }
 //Не работает так как Spring Security обрабатывает ошибки внутри себя
 //    @ExceptionHandler({AccessDeniedException.class})

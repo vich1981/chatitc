@@ -1,10 +1,16 @@
 package com.vich.chatitc.user;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.vich.chatitc.error.ApiError;
+import com.vich.chatitc.shared.CurrentUser;
 import com.vich.chatitc.shared.GenericResponse;
+import com.vich.chatitc.user.vm.UserVM;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -15,14 +21,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/1.0")
 public class UserController {
 
     @Autowired
     UserService userService;
-    @PostMapping("/api/1.0/users")
+    @PostMapping("/users")
     GenericResponse createUser(@Valid @RequestBody User user){
         userService.save(user);
         return new GenericResponse("User saved");
+    }
+
+    @GetMapping("/users")
+   // @JsonView(Views.Base.class)
+    Page<UserVM> getUsers(@CurrentUser User loggedInUser, Pageable page) {
+        return userService.getUsers(loggedInUser, page).map(UserVM::new);
     }
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)

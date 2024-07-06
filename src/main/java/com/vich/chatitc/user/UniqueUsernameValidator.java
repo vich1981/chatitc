@@ -4,13 +4,13 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class UniqueUserNameValidator implements ConstraintValidator<UniqueUserName, String> {
+public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, String> {
 
     @Autowired
     UserRepository userRepository;
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context){
-        User inDB = userRepository.findByUserName(value);
+        User inDB = userRepository.findByUsername(value);
         if(inDB == null){
             return true;
         }

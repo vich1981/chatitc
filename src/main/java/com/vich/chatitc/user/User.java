@@ -24,23 +24,23 @@ public class User implements UserDetails {
     private static final long serialVersionUID = 4074374728582967483L;
     @Id
     @GeneratedValue
-    @JsonView(Views.Base.class)
+    //@JsonView(Views.Base.class)
     private long id;
-    @NotNull(message = "{chatitc.constraints.userName.NotNull.message}")
+    @NotNull(message = "{chatitc.constraints.username.NotNull.message}")
     @Size(min = 3, max = 255)
-    @UniqueUserName
-    @JsonView(Views.Base.class)
-    private String userName;
+    @UniqueUsername
+    //@JsonView(Views.Base.class)
+    private String username;
     @NotNull(message = "{chatitc.constraints.displayName.NotNull.message}")
     @Size(min = 3, max = 255)
-    @JsonView(Views.Base.class)
+    //@JsonView(Views.Base.class)
     private String displayName;
     @NotNull(message = "{chatitc.constraints.password.NotNull.message}")
     @Size(min = 8, max = 255)
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message="{chatitc.constraints.password.Pattern.message}")
     private String password;
 
-    @JsonView(Views.Base.class)
+    //@JsonView(Views.Base.class)
     private String image;
 
     @Transient
@@ -72,11 +72,11 @@ public class User implements UserDetails {
     @Override
     @Transient
     public String getUsername() {
-        return this.userName;
+        return this.username;
     }
-    public String getUserName(){
-        return this.userName;
-    }
+//    public String getUserName(){
+//        return this.userName;
+//    }
 //    @Override
 //    @Transient
 //    public String getPassword() {
