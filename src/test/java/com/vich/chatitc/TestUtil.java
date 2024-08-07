@@ -1,6 +1,7 @@
 package com.vich.chatitc;
 
 import com.vich.chatitc.user.User;
+import com.vich.chatitc.user.vm.UserUpdateVM;
 
 public class TestUtil {
     public static User createValidUser(){
@@ -17,5 +18,10 @@ public class TestUtil {
         User user = createValidUser();
         user.setUsername(username);
         return user;
+    }
+    public static UserUpdateVM createValidUserUpdateVM() {
+        UserUpdateVM updatedUser = new UserUpdateVM();
+        updatedUser.setDisplayName("newDisplayName");
+        return updatedUser;
     }
 }

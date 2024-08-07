@@ -47,6 +47,7 @@ public class SecurityConfiguration{
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers(HttpMethod.POST,"/api/1.0/login").authenticated()
+                                .requestMatchers(HttpMethod.PUT,"/api/1.0/users/{id:[0-9]+}").authenticated()
                                 .requestMatchers("/api/1.0/**").permitAll()//hasAuthority("USER")
                                 .anyRequest().permitAll())//authenticated())
 
