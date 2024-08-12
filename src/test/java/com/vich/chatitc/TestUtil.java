@@ -1,5 +1,6 @@
 package com.vich.chatitc;
 
+import com.vich.chatitc.hoax.Hoax;
 import com.vich.chatitc.user.User;
 import com.vich.chatitc.user.vm.UserUpdateVM;
 
@@ -23,5 +24,10 @@ public class TestUtil {
         UserUpdateVM updatedUser = new UserUpdateVM();
         updatedUser.setDisplayName("newDisplayName");
         return updatedUser;
+    }
+    public static Hoax createValidHoax(){
+        Hoax hoax = new Hoax();
+        hoax.setContent("test content for the test hoax");
+        return hoax;
     }
 }

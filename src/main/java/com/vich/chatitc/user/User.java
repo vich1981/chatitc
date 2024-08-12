@@ -2,6 +2,7 @@ package com.vich.chatitc.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.vich.chatitc.hoax.Hoax;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static com.vich.chatitc.user.Role.ROLE_USER;
 
@@ -42,6 +44,10 @@ public class User implements UserDetails {
 
     //@JsonView(Views.Base.class)
     private String image;
+
+
+    @OneToMany(mappedBy = "current")
+    private List<Hoax> hoaxes;
 
     @Transient
     private List<SimpleGrantedAuthority> authorities;
@@ -106,4 +112,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
