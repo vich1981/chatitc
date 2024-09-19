@@ -11,12 +11,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-
-import static com.vich.chatitc.user.Role.ROLE_USER;
 
 @Data
 @Entity
@@ -46,7 +42,7 @@ public class User implements UserDetails {
     private String image;
 
 
-    @OneToMany(mappedBy = "current")
+    @OneToMany(mappedBy = "currentUser")
     private List<Hoax> hoaxes;
 
     @Transient
@@ -56,24 +52,25 @@ public class User implements UserDetails {
 //    private Role role = ROLE_USER;
 
 
-//    @Override
-//    @Transient
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-////        GrantedAuthority authority = new SimpleGrantedAuthority("Role_USER");
-////        ArrayList<GrantedAuthority> authorityList = new ArrayList();
-////        authorityList.add(authority);
-//        return AuthorityUtils.createAuthorityList("Role_USER");
-//    }
+    @Override
+    @Transient
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        GrantedAuthority authority = new SimpleGrantedAuthority("Role_USER");
+//        ArrayList<GrantedAuthority> authorityList = new ArrayList();
+//        authorityList.add(authority);
+        return AuthorityUtils.createAuthorityList("Role_USER");
+    }
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {
 //        return List.of(() -> "read");
 //    }
 
-    @Override
-    @Transient
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
+//    @Override
+//    @Transient
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return null;
+//    }
 
     @Override
     @Transient

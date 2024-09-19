@@ -1,5 +1,6 @@
 package com.vich.chatitc.hoax;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vich.chatitc.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -26,5 +27,6 @@ public class Hoax {
     private Date timestamp;
 //    @Column(length = 300)
     @ManyToOne//(mappedBy="hoaxes")
-    private User current;
+    //@JsonIgnore
+    private User currentUser;
 }
